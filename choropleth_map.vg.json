@@ -1,0 +1,57 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "title": "Birth Rate by State in Malaysia (2021)",
+  "width": 600,
+  "height": 400,
+  "projection": {"type": "mercator"},
+  "data": {
+    "url": "https://raw.githubusercontent.com/JIAZZ39/FIT3179_Week9_HW/main/ne_10m_admin_1_msia_states.json",
+    "format": {"type": "topojson", "feature": "ne_10m_admin_1_states_provinces"}
+  },
+  "transform": [
+    {
+      "lookup": "properties.name",
+      "from": {
+        "data": {
+          "url": "https://raw.githubusercontent.com/JIAZZ39/FIT3179_Week9_HW/main/normalised_birth_population_by_state_msia.csv"
+        },
+        "key": "state",
+        "fields": ["Birth_Rate_per_1000", "birth raw", "population raw"]
+      }
+    }
+  ],
+  "mark": {"type": "geoshape", "stroke": "white"},
+  "encoding": {
+    "color": {
+      "field": "Birth_Rate_per_1000",
+      "type": "quantitative",
+      "scale": {
+        "type": "threshold",
+        "domain": [12, 15, 18],
+        "range": ["#ffffd4", "#a1dab4", "#41b6c4", "#225ea8"]
+      },
+      "title": "Births per 1,000 People"
+    },
+    "tooltip": [
+      {"field": "properties.name", "type": "nominal", "title": "State"},
+      {
+        "field": "Birth_Rate_per_1000",
+        "type": "quantitative",
+        "title": "Birth Rate (per 1,000)",
+        "format": ".2f"
+      },
+      {
+        "field": "birth raw",
+        "type": "quantitative",
+        "title": "Total Births",
+        "format": ","
+      },
+      {
+        "field": "population raw",
+        "type": "quantitative",
+        "title": "Total Population",
+        "format": ","
+      }
+    ]
+  }
+}
